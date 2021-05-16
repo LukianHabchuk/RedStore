@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="constructor::head"></head>
+<body>
+
+    <div th:include="constructor::navbar"></div>
+
+    <div class="small-container">
+
+        <div class="row row-2">
+            <h2>All products</h2>
+<!--            <form action="/sort" method="get">-->
+<!--                <select onchange="this.form.get().submit()" name="" id="selectCategory">-->
+<!--                    <option value="default">Default sorting</option>-->
+<!--                    <option value="priceLow">Price low to high</option>-->
+<!--                    <option value="priceHigh">Price high to low</option>-->
+<!--                    <option value="rating">Sort by rating</option>-->
+<!--                </select>-->
+<!--            </form>-->
+        </div>
+
+        <div th:include="constructor::products"></div>
+
+        <div class="page-btn">
+            <a th:each="i : ${#numbers.sequence( 1, page_count)}" th:href="@{/product/__${i}__}"><span th:text="${ i }"></span></a>
+            <a th:if="${current_page < page_count}" th:href="@{/product/__${current_page+1}__}"><span>&#8594;</span></a>
+        </div>
+    </div>
+
+<!-- footer -->
+<div th:include="constructor::footer"></div>
+
+<!-- js for toggle menu -->
+<script th:src="@{/js/toggleScript.js}"></script>
+
+    </body>
+</html>

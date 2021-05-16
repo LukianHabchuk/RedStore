@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:include="constructor::head"></head>
+    <body>
+
+    <div th:include="constructor::navbar"></div>
+
+        <!-- single product details -->
+        <div class="small-container single-product">
+            <div class="row">
+        <div class="col-2">
+            <img th:src="${currentProduct.getImg()}" width="100%" id="ProductImg">
+
+            <div class="small-img-row">
+                <div class="small-img-col">
+                    <img th:src="${currentProduct.getImg()}" width="100%" class="small-img">
+                </div>
+                <div class="small-img-col">
+                    <img th:src="${currentProduct.getImg()}" width="100%" class="small-img">
+                </div>
+                <div class="small-img-col">
+                    <img th:src="${currentProduct.getImg()}" width="100%" class="small-img">
+                </div>
+                <div class="small-img-col">
+                    <img th:src="${currentProduct.getImg()}" width="100%" class="small-img">
+                </div>
+            </div>
+        </div>
+
+                <div class="col-2">
+                    <p th:text="'Home / '+${currentProduct.getType()}">Home / T-Shirt</p>
+                    <h1 th:text="${currentProduct.getName()}"></h1>
+                    <h4 th:text="${currentProduct.getPrice()}+'$'"></h4>
+
+                    <div th:switch="${currentProduct.getType().toString()}">
+                        <select th:case="'SHOES'" name="" id="">
+                            <option value="">Select Size</option>
+                            <option value="">40</option>
+                            <option value="">41</option>
+                            <option value="">42</option>
+                            <option value="">43</option>
+                            <option value="">44</option>
+                        </select>
+                        <select th:case="'ELECTRONIC'" name="" id="">
+                            <option value="">One Size</option>
+                        </select>
+                        <select th:case="*" name="" id="">
+                            <option value="">Select Size</option>
+                            <option value="">XXL</option>
+                            <option value="">XL</option>
+                            <option value="">L</option>
+                            <option value="">M</option>
+                            <option value="">S</option>
+                        </select>
+                    </div>
+
+                    <input type="number" value="1">
+                    <a href="" class="btn">Add to cart</a>
+                    <h3>Product Details <i class="fa fa-indent"></i></h3>
+                    <br>
+                    <p th:text="${currentProduct.getDetails()}"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- title -->
+
+        <div class="small-container">
+            <div class="row row-2">
+                <h2>Related products</h2>
+                <p>View more</p>
+            </div>
+        </div>
+
+    <!-- products -->
+    <div th:include="constructor::products"></div>
+
+<!-- footer -->
+<div th:include="constructor::footer"></div>
+
+<!-- js for toggle menu -->
+<script th:src="@{/js/toggleScript.js}"></script>
+
+<!-- js for product gallery -->
+<script th:src="@{/js/galleryScript.js}"></script>
+
+    </body>
+</html>

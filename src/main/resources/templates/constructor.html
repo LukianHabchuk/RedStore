@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+  <meta charset="UTF-8">
+  <title>RedStor | Ecomerce Designe</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+
+<div th:fragment="navbar" class="header">
+  <div class="container">
+    <div class="navbar">
+      <div class="logo">
+        <a href="/index"><img th:src="@{/images/logo.png}" width="125px"></a>
+      </div>
+      <nav>
+        <ul id="MenuItems">
+          <li><a href="/index">Home</a></li>
+          <li><a href="/product/1">Product</a></li>
+          <li><a href="">About</a></li>
+          <li><a href="">Contact</a></li>
+          <li><a href="/account">Account</a></li>
+        </ul>
+      </nav>
+      <a href="/cart"><img th:src="@{/images/cart.png}" width="30px" height="30px"></a>
+      <img th:src="@{/images/menu.png}" class="menu-icon"
+           onclick="menutoggle()">
+    </div>
+  </div>
+</div>
+
+
+<div th:fragment="products">
+  <div class="small-container">
+    <div class="row">
+      <div th:each="product: ${productList}" class="col-4">
+        <a th:href="@{/product-details/__${product.getId()}__}">
+          <img th:src="${product.getImg()}">
+          <h4 th:text="${product.getName()}"></h4>
+          <div class="rating">
+            <i th:if="${product.getRatio()}>=1" class="fa fa-star"></i>
+            <i th:if="${product.getRatio()}>=2" class="fa fa-star"></i>
+            <i th:if="${product.getRatio()}>=3" class="fa fa-star"></i>
+            <i th:if="${product.getRatio()}>=4" class="fa fa-star"></i>
+            <i th:if="${product.getRatio()}==5" class="fa fa-star"></i>
+          </div>
+          <p th:text="${product.getPrice()}+'$'"></p>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div th:fragment="brands">
+  <div class="brands">
+    <div class="small-container">
+      <div class="row">
+        <div class="col-5">
+          <img th:src="@{/images/logo-godrej.png}">
+        </div>
+        <div class="col-5">
+          <img th:src="@{/images/logo-oppo.png}">
+        </div>
+        <div class="col-5">
+          <img th:src="@{/images/logo-coca-cola.png}">
+        </div>
+        <div class="col-5">
+          <img th:src="@{/images/logo-paypal.png}">
+        </div>
+        <div class="col-5">
+          <img th:src="@{/images/logo-philips.png}">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:fragment="footer" >
+  <div class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="footer-col-1">
+          <h3>Download app</h3>
+          <p>Download app for android and ios</p>
+          <div class="app-logo">
+            <img th:src="@{/images/play-store.png}">
+            <img th:src="@{/images/app-store.png}">
+          </div>
+        </div>
+        <div class="footer-col-2">
+          <img th:src="@{/images/logo-white.png}">
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            Ipsam odio vel laudantium expedita,
+            dolorem autem hic commodi error perspiciatis ullam.</p>
+        </div>
+        <div class="footer-col-3">
+          <h3>Usefull links</h3>
+          <ul>
+            <li>Coupons</li>
+            <li>Blog post</li>
+            <li>Return policy</li>
+            <li>Join afiliate</li>
+          </ul>
+        </div>
+        <div class="footer-col-4">
+          <h3>Follow us</h3>
+          <ul>
+            <li>Facebook</li>
+            <li>Twitter</li>
+            <li>Instagram</li>
+            <li>Youtube</li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <p class="copyright">2021</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
