@@ -1,12 +1,17 @@
 package com.example.redStore;
 
 import com.example.redStore.entity.Product;
+import com.example.redStore.entity.User;
 import com.example.redStore.enums.ProductType;
+import com.example.redStore.enums.Role;
+import com.example.redStore.enums.Status;
 import com.example.redStore.enums.Tag;
 import com.example.redStore.service.ProductService;
+import com.example.redStore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
 
@@ -15,6 +20,10 @@ public class RedStoreApplication {
 
 	@Autowired
 	private ProductService service;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private PasswordEncoder encoder;
 
 	private String details = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.";
 
@@ -36,5 +45,6 @@ public class RedStoreApplication {
 		service.create(new Product(10, "Black shoes1", 50, "/images/product-10.jpg", ProductType.SHOES, Tag.STANDARD, 4, true, 2, details));
 		service.create(new Product(11, "Gray shoes", 50, "/images/product-11.jpg", ProductType.SHOES, Tag.FEATURED, 4, true, 2, details));
 		service.create(new Product(12, "Black pants", 50, "/images/product-12.jpg", ProductType.PANTS, Tag.STANDARD, 4, true, 2, details));
+		userService.create(new User("admin", "admin@mail.com", encoder.encode("admin"), Role.ADMIN, Status.ACTIVE));
 	}
 }

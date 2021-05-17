@@ -1,5 +1,6 @@
 package com.example.redStore.controller;
 
+import com.example.redStore.dto.UserDTO;
 import com.example.redStore.entity.Product;
 import com.example.redStore.enums.Tag;
 import com.example.redStore.service.ProductService;
@@ -31,6 +32,7 @@ public class MainController {
 
     @GetMapping("/account")
     public String getAccount(Model model) {
+        model.addAttribute("userDTO", new UserDTO());
         return "account";
     }
 

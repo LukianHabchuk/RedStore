@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
     <head th:include="constructor::head"></head>
     <body>
 
     <div th:include="constructor::navbar"></div>
+
 
 <!-- ACCOUNT PAGE -->
 <div class="account-page">
@@ -19,17 +23,17 @@
                         <span onclick="register()">Register</span>
                         <hr id="Indicator">
                     </div>
-                    <form id="LoginForm">
-                        <input type="text" placeholder="Username">
-                        <input type="password" placeholder="Password">
+                    <form th:action="@{/login}" method="post" id="LoginForm">
+                        <input type="text" name="username" placeholder="Username">
+                        <input type="password" name="password" placeholder="Password">
                         <button type="submit" class="btn">Login</button>
                         <a href="">Forgot password</a>
                     </form>
 
-                    <form id="RegForm">
-                        <input type="text" placeholder="Username">
-                        <input type="email" placeholder="Email">
-                        <input type="password" placeholder="Password">
+                    <form th:action="@{/registration}" th:object="${userDTO}" method="post" id="RegForm">
+                        <input type="text" name="username" placeholder="Username">
+                        <input type="text" name="email" placeholder="Email">
+                        <input type="password" name="password" placeholder="Password">
                         <button type="submit" class="btn">Register</button>
                     </form>
 
@@ -42,8 +46,11 @@
 <!-- footer -->
 <div th:include="constructor::footer"></div>
 
-<!-- js for toggle form -->
+<!-- js for toggle -->
 <script th:src="@{/js/toggleScript.js}"></script>
+
+    <!-- js for toggle form -->
+    <script th:src="@{/js/toggleFormScript.js}"></script>
 
     </body>
 </html>
