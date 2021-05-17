@@ -1,6 +1,7 @@
 package com.example.redStore.service;
 
 import com.example.redStore.entity.Product;
+import com.example.redStore.exception.ProductNotFoundException;
 import com.example.redStore.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,6 @@ public class ProductService {
     }
 
     public Product getById(Long id) {
-        return repository.getProductById(id);
+        return repository.findById(id).orElseThrow(() -> new ProductNotFoundException("product with id: " + id + " was not found"));
     }
 }
