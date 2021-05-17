@@ -10,7 +10,7 @@
 
 
 <!-- ACCOUNT PAGE -->
-<div class="account-page">
+<div sec:authorize="isAnonymous()" class="account-page">
     <div class="container">
         <div class="row">
             <div class="col-2">
@@ -42,6 +42,28 @@
         </div>
     </div>
 </div>
+
+    <!-- account details -->
+    <div sec:authorize="isAuthenticated()" class="account-page">
+        <div class="container">
+            <div class="row">
+                <div class="col-2">
+                    <div class="form-container">
+                        <div class="form-btn">
+                            <h2>Account menu</h2>
+                        </div>
+                        <form id="account">
+                            <input type="text" name="username" th:placeholder="${currentuser.getUserName()}">
+                            <input type="email" name="email" th:placeholder="${currentuser.getEmail()}">
+                            <p>I can't show your password, but you may know it...</p>
+                            <input type="password" name="password" placeholder="Password">
+                            <button type="submit" class="btn">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <!-- footer -->
 <div th:include="constructor::footer"></div>

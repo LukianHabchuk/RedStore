@@ -25,7 +25,18 @@ public class UserService {
     }
 
     public User getById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new UserNotFoundException("user with id: " + id + " was not found"));
+        return repository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("user with id: " + id + " was not found"));
+    }
+
+    public User getByUserName(String userName) {
+        return repository.findByUserName(userName)
+                .orElseThrow(() -> new UserNotFoundException("user with userName: " + userName + " was not found"));
+    }
+
+    public User getByEmail(String email) {
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("user with email: " + email + " was not found"));
     }
 
 }

@@ -4,11 +4,13 @@ import com.example.redStore.dto.UserDTO;
 import com.example.redStore.entity.Product;
 import com.example.redStore.enums.Tag;
 import com.example.redStore.service.ProductService;
+import com.example.redStore.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,9 +20,11 @@ import static com.example.redStore.constants.Constants.PRODUCT_COUNT_PER_PAGE;
 public class MainController {
 
     private final ProductService productService;
+    private final UserService userService;
 
-    public MainController(ProductService productService) {
+    public MainController(ProductService productService, UserService userService) {
         this.productService = productService;
+        this.userService = userService;
     }
 
     @GetMapping("/index")
@@ -31,7 +35,9 @@ public class MainController {
     }
 
     @GetMapping("/account")
-    public String getAccount(Model model) {
+    public String getAccount(Model model, Principal principal) {
+        if (principal!=null)
+            model.addAttribute("currentuser", userService.getByEmail(principal.getName()));
         model.addAttribute("userDTO", new UserDTO());
         return "account";
     }
