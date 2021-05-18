@@ -1,7 +1,6 @@
 package com.example.redStore.controller;
 
 import com.example.redStore.dto.OrderDTO;
-import com.example.redStore.entity.Order;
 import com.example.redStore.service.OrderService;
 import com.example.redStore.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -12,6 +11,7 @@ import java.security.Principal;
 
 @Controller
 public class OrderController {
+
     private final OrderService orderService;
     private final UserService userService;
 
@@ -20,12 +20,9 @@ public class OrderController {
         this.userService = userService;
     }
 
-    @PostMapping("/addtocart/{id}")
-    public String addToCart(@PathVariable("id") long id, OrderDTO orderDTO, Principal principal) {
-        if (principal != null) {
-            orderService.create(new Order(userService.getByEmail(principal.getName()).getId(),
-                    id, orderDTO.getSize(), orderDTO.getCount()));
-        }
+    @PostMapping("/createorder/{id}")
+    public String createOrder(@PathVariable("id") long id, OrderDTO orderDTO, Principal principal) {
+            orderService.create(id, orderDTO, userService.getByEmail(principal.getName()).getId());
         return "redirect:/product-details/"+id;
     }
 }

@@ -34,7 +34,8 @@
                     <h1 th:text="${currentProduct.getName()}"></h1>
                     <h4 th:text="${currentProduct.getPrice()}+'$'"></h4>
 
-                    <form th:action="@{/addtocart/__${currentProduct.getId()}__}" th:object="${orderDTO}" method="post">
+                    <form th:action="@{/createorder/__${currentProduct.getId()}__}" th:object="${orderDTO}" method="post">
+
                         <div th:switch="${currentProduct.getType().toString()}">
                             <select th:case="'SHOES'" name="size">
                                 <option th:type="text" value="">Select Size</option>

@@ -1,5 +1,6 @@
 package com.example.redStore.service;
 
+import com.example.redStore.dto.OrderDTO;
 import com.example.redStore.entity.Order;
 import com.example.redStore.exception.OrderNotFoundException;
 import com.example.redStore.repository.OrderRepository;
@@ -7,8 +8,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.example.redStore.util.Validator.isValid;
+
 @Service
 public class OrderService {
+
     private final OrderRepository repository;
 
     public OrderService(OrderRepository repository) {
@@ -17,6 +21,11 @@ public class OrderService {
 
     public Order create(Order order) {
         return repository.save(order);
+    }
+
+    public Order create(long id, OrderDTO orderDTO, long userId) {
+        return isValid(orderDTO) ? new Order(userId, id,
+                orderDTO.getSize(), orderDTO.getCount()) : null;
     }
 
     public List<Order> getAll() {
