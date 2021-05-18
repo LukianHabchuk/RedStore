@@ -1,5 +1,6 @@
 package com.example.redStore.controller;
 
+import com.example.redStore.dto.OrderDTO;
 import com.example.redStore.dto.UserDTO;
 import com.example.redStore.entity.Product;
 import com.example.redStore.enums.Tag;
@@ -68,6 +69,7 @@ public class MainController {
     @GetMapping("/product-details/{id}")
     public String getProductDetails(Model model, @PathVariable("id") long id) {
         Product product = productService.getById(id);
+        model.addAttribute("orderDTO", new OrderDTO());
         model.addAttribute("currentProduct", product);
         model.addAttribute("productList", productService.getAll().stream().filter(p -> p.getType() == product.getType()).limit(4).collect(Collectors.toList()));
         return "product-details";

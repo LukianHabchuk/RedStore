@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
     <head th:include="constructor::head"></head>
     <body>
 
@@ -26,36 +29,38 @@
                 </div>
             </div>
         </div>
-
                 <div class="col-2">
                     <p th:text="'Home / '+${currentProduct.getType()}">Home / T-Shirt</p>
                     <h1 th:text="${currentProduct.getName()}"></h1>
                     <h4 th:text="${currentProduct.getPrice()}+'$'"></h4>
 
-                    <div th:switch="${currentProduct.getType().toString()}">
-                        <select th:case="'SHOES'" name="" id="">
-                            <option value="">Select Size</option>
-                            <option value="">40</option>
-                            <option value="">41</option>
-                            <option value="">42</option>
-                            <option value="">43</option>
-                            <option value="">44</option>
-                        </select>
-                        <select th:case="'ELECTRONIC'" name="" id="">
-                            <option value="">One Size</option>
-                        </select>
-                        <select th:case="*" name="" id="">
-                            <option value="">Select Size</option>
-                            <option value="">XXL</option>
-                            <option value="">XL</option>
-                            <option value="">L</option>
-                            <option value="">M</option>
-                            <option value="">S</option>
-                        </select>
-                    </div>
+                    <form th:action="@{/addtocart/__${currentProduct.getId()}__}" th:object="${orderDTO}" method="post">
+                        <div th:switch="${currentProduct.getType().toString()}">
+                            <select th:case="'SHOES'" name="size">
+                                <option th:type="text" value="">Select Size</option>
+                                <option value="40">40</option>
+                                <option value="41">41</option>
+                                <option value="42">42</option>
+                                <option value="43">43</option>
+                                <option value="44">44</option>
+                            </select>
+                            <select th:case="'ELECTRONIC'" name="size">
+                                <option value="OneSize">One Size</option>
+                            </select>
+                            <select th:case="*" name="size">
+                                <option value="">Select Size</option>
+                                <option value="XXL">XXL</option>
+                                <option value="XL">XL</option>
+                                <option value="L">L</option>
+                                <option value="M">M</option>
+                                <option value="S">S</option>
+                            </select>
+                        </div>
 
-                    <input type="number" value="1">
-                    <a href="" class="btn">Add to cart</a>
+                        <input name="count" type="number" value="1">
+                        <button sec:authorize="isAuthenticated()" type="submit" class="btn">Add to cart</button>
+                    </form>
+
                     <h3>Product Details <i class="fa fa-indent"></i></h3>
                     <br>
                     <p th:text="${currentProduct.getDetails()}"></p>

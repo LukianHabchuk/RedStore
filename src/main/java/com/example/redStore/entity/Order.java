@@ -22,4 +22,11 @@ public class Order implements Serializable {
     private long productId;
     private String productSize;
     private int productCount;
+
+    public Order(long userId, long productId, String productSize, int productCount) {
+        this.userId = userId;
+        this.productId = productId;
+        this.productSize = productSize;
+        this.productCount = productCount;
+    }
 }
