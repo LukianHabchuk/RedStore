@@ -24,8 +24,12 @@ public class OrderService {
     }
 
     public Order create(long id, OrderDTO orderDTO, long userId) {
-        return isValid(orderDTO) ? new Order(userId, id,
-                orderDTO.getSize(), orderDTO.getCount()) : null;
+        return isValid(orderDTO) ? repository.save(new Order(userId, id,
+                orderDTO.getSize(), orderDTO.getCount())) : null;
+    }
+
+    public void remove(long id) {
+        repository.deleteById(id);
     }
 
     public List<Order> getAll() {
@@ -36,11 +40,11 @@ public class OrderService {
         return repository.findById(id).orElseThrow(() -> new OrderNotFoundException("Order with id: " + id + " was not found"));
     }
 
-    public Order getByUserId(Long id) {
-        return repository.findByUserId(id).orElseThrow(() -> new OrderNotFoundException("Order with user id: " + id + " was not found"));
+    public List<Order> getByUserId(Long id) {
+        return repository.findAllByUserId(id).orElseThrow(() -> new OrderNotFoundException("Order with user id: " + id + " was not found"));
     }
 
-    public Order getByProductId(Long id) {
-        return repository.findByProductId(id).orElseThrow(() -> new OrderNotFoundException("Order with product id: " + id + " was not found"));
+    public List<Order> getByProductId(Long id) {
+        return repository.findAllByProductId(id).orElseThrow(() -> new OrderNotFoundException("Order with product id: " + id + " was not found"));
     }
 }

@@ -1,78 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
     <head th:include="constructor::head"></head>
     <body>
 
     <div th:include="constructor::navbar"></div>
 
+<!--empty cart details -->
+    <div th:if="${products.size()==0}">
+        <h1>Your cart is empty yet...</h1>
+    </div>
+
 <!-- cart items details -->
         <div class="small-container cart-page">
-            <table>
-                <tr>
-                    <th>Product</th>
-                    <th>Quantify</th>
-                    <th>Subtotal</th>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="cart-info">
-                            <img th:src="@{/images/buy-1.jpg}">
-                            <div>
-                                <p>Red printed tshirt</p>
-                                <small>Price: $50.00</small>
-                                <br>
-                                <a href="">Remove</a>
-                            </div>
-                        </div>
-                    </td>
-                    <td><input type="number" value="1"></td>
-                    <td>$50.00</td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="cart-info">
-                            <img th:src="@{/images/buy-2.jpg}">
-                            <div>
-                                <p>Red printed tshirt</p>
-                                <small>Price: $50.00</small>
-                                <br>
-                                <a href="">Remove</a>
-                            </div>
-                        </div>
-                    </td>
-                    <td><input type="number" value="1"></td>
-                    <td>$50.00</td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="cart-info">
-                            <img th:src="@{/images/buy-3.jpg}">
-                            <div>
-                                <p>Red printed tshirt</p>
-                                <small>Price: $50.00</small>
-                                <br>
-                                <a href="">Remove</a>
-                            </div>
-                        </div>
-                    </td>
-                    <td><input type="number" value="1"></td>
-                    <td>$50.00</td>
-                </tr>
-            </table>
-
-            <div class="total-price">
+            <div th:each="product: ${products}">
                 <table>
                     <tr>
+                        <th>Product</th>
+                        <th>Quantify</th>
+                        <th>Subtotal</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="cart-info">
+                                <img th:src="${product.getImg()}">
+                                <div>
+                                    <p th:text="${product.getName()}"></p>
+                                    <small th:text="${product.getPrice()}"></small>
+                                    <a data-th-method="get" th:href="@{/order/__${orders.get(product).getId()}__}">Remove</a>
+                                </div>
+                            </div>
+                        </td>
+                        <td><input id="quant" type="number" disabled th:value="${orders.get(product).getProductCount()}"></td>
+                        <td id="sub" th:text="${orders.get(product).getProductCount()*product.getPrice()}"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="total-price">
+                <table th:if="${products.size()>0}">
+                    <tr>
                         <td>Subtotal</td>
-                        <td>$200.00</td>
+                        <td th:text="${subtotal}"></td>
                     </tr>
                     <tr>
                         <td>Tax</td>
-                        <td>$30.00</td>
+                        <td th:text="${tax}"></td>
                     </tr>
                     <tr>
                         <td>Total</td>
-                        <td>$230.00</td>
+                        <td th:text="${subtotal+tax}"></td>
                     </tr>
                 </table>
             </div>

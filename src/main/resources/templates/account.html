@@ -24,16 +24,16 @@
                         <hr id="Indicator">
                     </div>
                     <form th:action="@{/login}" method="post" id="LoginForm">
-                        <input type="text" name="username" placeholder="Username">
-                        <input type="password" name="password" placeholder="Password">
+                        <input type="text" name="username" required placeholder="Username">
+                        <input type="password" name="password" required placeholder="Password">
                         <button type="submit" class="btn">Login</button>
                         <a href="">Forgot password</a>
                     </form>
 
                     <form th:action="@{/registration}" th:object="${userDTO}" method="post" id="RegForm">
-                        <input type="text" name="username" placeholder="Username">
-                        <input type="text" name="email" placeholder="Email">
-                        <input type="password" name="password" placeholder="Password">
+                        <input type="text" name="username" required placeholder="Username">
+                        <input type="text" name="email" required placeholder="Email">
+                        <input type="password" name="password" required placeholder="Password">
                         <button type="submit" class="btn">Register</button>
                     </form>
 

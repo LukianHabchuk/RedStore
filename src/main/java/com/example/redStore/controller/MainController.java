@@ -2,8 +2,11 @@ package com.example.redStore.controller;
 
 import com.example.redStore.dto.OrderDTO;
 import com.example.redStore.dto.UserDTO;
+import com.example.redStore.entity.Order;
 import com.example.redStore.entity.Product;
+import com.example.redStore.entity.User;
 import com.example.redStore.enums.Tag;
+import com.example.redStore.service.OrderService;
 import com.example.redStore.service.ProductService;
 import com.example.redStore.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -12,7 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.example.redStore.constants.Constants.PRODUCT_COUNT_PER_PAGE;
@@ -22,10 +28,12 @@ public class MainController {
 
     private final ProductService productService;
     private final UserService userService;
+    private final OrderService orderService;
 
-    public MainController(ProductService productService, UserService userService) {
+    public MainController(ProductService productService, UserService userService, OrderService orderService) {
         this.productService = productService;
         this.userService = userService;
+        this.orderService = orderService;
     }
 
     @GetMapping("/index")
@@ -44,7 +52,23 @@ public class MainController {
     }
 
     @GetMapping("/cart")
-    public String getCart(Model model) {
+    public String getCart(Model model, Principal principal) {
+        var user = userService.getByEmail(principal.getName());
+        double subtotal = 0;
+        List<Order> orders = orderService.getByUserId(user.getId());
+        List<Product> productList = new ArrayList<>();
+        orders.forEach(o -> productList.add(productService.getById(o.getProductId())));
+        Map<Product, Order> productIntegerMap = new HashMap<>();
+
+        for(var i = 0; i < orders.size(); i++) {
+            productIntegerMap.put(productList.get(i), orders.get(i));
+            subtotal += orders.get(i).getProductCount()*productList.get(i).getPrice();
+        }
+
+        model.addAttribute("tax", 30);
+        model.addAttribute("subtotal", subtotal);
+        model.addAttribute("products", productIntegerMap.keySet());
+        model.addAttribute("orders", productIntegerMap);
         return "cart";
     }
 
