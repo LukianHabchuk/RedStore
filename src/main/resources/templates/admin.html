@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="constructor::head"></head>
+<body>
+<!--navbar-->
+<div th:include="constructor::navbar"></div>
+
+
+<div class="row">
+    <h1>Admin panel</h1>
+</div>
+<!-- tabs -->
+<div class="container">
+    <div class="row">
+        <div class="tab">
+            <button class="col-3 tablinks" onclick="openTable(event, 'Products')">Products</button>
+            <button class="col-3 tablinks" onclick="openTable(event, 'Users')">Users</button>
+            <button class="col-3 tablinks" onclick="openTable(event, 'Orders')">Orders</button>
+        </div>
+    </div>
+    <!-- products -->
+    <div id="Products" class="tabcontent">
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Img</th>
+                <th>Type</th>
+                <th>Tag</th>
+                <th>Ratio</th>
+                <th>Available</th>
+                <th>Details</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td><p>Red printed tshirt</p></td>
+                <td><small>$50.00</small></td>
+                <td>
+                    <div class="cart-info"><img src="images/buy-1.jpg"></div>
+                </td>
+                <td>TSHIRT</td>
+                <td>STANDARD</td>
+                <td>5</td>
+                <td>10</td>
+                <td>details</td>
+                <td>
+                    <a href="">Remove</a>
+                    <a href="">Save</a>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td><p>Red printed tshirt</p></td>
+                <td><small>$150.00</small></td>
+                <td>
+                    <div class="cart-info"><img src="images/buy-2.jpg"></div>
+                </td>
+                <td>TSHIRT</td>
+                <td>STANDARD</td>
+                <td>3</td>
+                <td>15</td>
+                <td>details</td>
+                <td>
+                    <a href="">Remove</a>
+                    <a href="">Save</a>
+                </td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td><p>Red printed tshirt</p></td>
+                <td><small>$150.00</small></td>
+                <td>
+                    <div class="cart-info"><img src="images/buy-3.jpg"></div>
+                </td>
+                <td>TSHIRT</td>
+                <td>STANDARD</td>
+                <td>3</td>
+                <td>15</td>
+                <td>details</td>
+                <td>
+                    <a href="">Remove</a>
+                    <a href="">Save</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- users -->
+    <div id="Users" class="tabcontent">
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>userName</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>admin</td>
+                <td>admin@mail.com</td>
+                <td>ADMIN</td>
+                <td>ACTIVE</td>
+                <td>
+                    <a href="">Remove</a>
+                    <a href="">Save</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- orders -->
+    <div id="Orders" class="tabcontent">
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>userId</th>
+                <th>productId</th>
+                <th>productSize</th>
+                <th>productCount</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>XXL</td>
+                <td>3</td>
+                <td>
+                    <a href="">Remove</a>
+                    <a href="">Save</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<!--footer-->
+<div th:include="constructor::footer"></div>
+
+<!-- js for toggle menu -->
+<script th:src="@{/js/toggleScript.js}"></script>
+
+<!-- tab script -->
+<script>
+    function openTable(evt, tableName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tableName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+</body>
+</html>

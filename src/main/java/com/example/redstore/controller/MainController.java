@@ -42,6 +42,11 @@ public class MainController {
         return "index";
     }
 
+    @GetMapping("/admin")
+    public String getAdmin() {
+        return "admin";
+    }
+
     @GetMapping("/account")
     public String getAccount(Model model, Principal principal) {
         if (principal!=null)
