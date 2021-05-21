@@ -22,8 +22,6 @@ public class RedStoreApplication {
 	private ProductService service;
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private PasswordEncoder encoder;
 
 	private String details = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.";
 
@@ -45,6 +43,6 @@ public class RedStoreApplication {
 		service.create(new Product(10, "Black shoes1", 50, "/images/product-10.jpg", ProductType.SHOES, Tag.STANDARD, 4, true, 2, details));
 		service.create(new Product(11, "Gray shoes", 50, "/images/product-11.jpg", ProductType.SHOES, Tag.FEATURED, 4, true, 2, details));
 		service.create(new Product(12, "Black pants", 50, "/images/product-12.jpg", ProductType.PANTS, Tag.STANDARD, 4, true, 2, details));
-		userService.create(new User("admin", "admin@mail.com", encoder.encode("admin"), Role.ADMIN, Status.ACTIVE));
+		userService.create(new User("admin", "admin@mail.com", "admin", Role.ADMIN, Status.ACTIVE));
 	}
 }

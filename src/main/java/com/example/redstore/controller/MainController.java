@@ -43,7 +43,10 @@ public class MainController {
     }
 
     @GetMapping("/admin")
-    public String getAdmin() {
+    public String getAdmin(Model model) {
+        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productService.getAll());
+        model.addAttribute("userList", userService.getAll());
+        model.addAttribute("orderList", orderService.getAll());
         return "admin";
     }
 
