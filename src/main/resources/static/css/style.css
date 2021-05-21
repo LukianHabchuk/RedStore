@@ -357,6 +357,8 @@ td input{
     width: 40px;
     height: 30px;
     padding: 5px;
+    background: white;
+    border: none;
 }
 td a{
     color: #ff523b;
@@ -495,6 +497,29 @@ form a{
     padding-bottom: 68px;
 }
 
+.btnRemove{
+    border: none;
+    outline: none;
+}
+.btnAdd{
+    border: none;
+    outline: none;
+    background: #6CFF95;
+}
+
+.btnRow {
+    margin-top: 10px;
+    padding: 10px 15px;
+    border-radius: 50%;
+    font-size: 15px;
+}
+
+.adminInput table tr td input {
+    width: 100px;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    transition: background 0.5s;
+}
 
 
 /* media query for menu less then 800 */

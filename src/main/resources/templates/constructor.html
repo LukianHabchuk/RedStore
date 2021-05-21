@@ -26,14 +26,13 @@
           <li><a href="">About</a></li>
           <li><a href="">Contact</a></li>
           <li><a href="/account">Account</a></li>
+          <li><a sec:authorize="hasAuthority('developers:write')" href="/admin">Admin panel</a></li>
         </ul>
       </nav>
       <a href="/cart"><img th:src="@{/images/cart.png}" width="30px" height="30px"></a>
       <img th:src="@{/images/menu.png}" class="menu-icon"
            onclick="menutoggle()">
-      <div sec:authorize="isAuthenticated()">
-           <a href="/logout">Log out</a>
-      </div>
+      <div sec:authorize="isAuthenticated()"><a href="/logout">Log out</a></div>
     </div>
   </div>
 </div>

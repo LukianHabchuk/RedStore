@@ -23,7 +23,7 @@
     </div>
     <!-- products -->
     <div id="Products" class="tabcontent">
-        <table>
+        <table id="product">
             <tr>
                 <th>Id</th>
                 <th>Name</th>
@@ -36,63 +36,69 @@
                 <th>Details</th>
                 <th>Action</th>
             </tr>
-            <tr>
-                <td>1</td>
-                <td><p>Red printed tshirt</p></td>
-                <td><small>$50.00</small></td>
+            <tr th:each="product: ${productList}">
+                <td th:text="${product.getId()}"></td>
+                <td><p th:text="${product.getName()}"></p></td>
+                <td><small th:text="${product.price}"></small></td>
                 <td>
-                    <div class="cart-info"><img src="images/buy-1.jpg"></div>
+                    <div class="cart-info"><img th:src="${product.getImg()}"></div>
                 </td>
-                <td>TSHIRT</td>
-                <td>STANDARD</td>
-                <td>5</td>
-                <td>10</td>
-                <td>details</td>
+                <td th:text="${product.getType()}"></td>
+                <td th:text="${product.getTag()}"></td>
+                <td th:text="${product.getRatio()}"></td>
+                <td th:text="${product.getCountAvailable()}"></td>
+                <td th:text="${product.getDetails()}"></td>
                 <td>
-                    <a href="">Remove</a>
-                    <a href="">Save</a>
-                </td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td><p>Red printed tshirt</p></td>
-                <td><small>$150.00</small></td>
-                <td>
-                    <div class="cart-info"><img src="images/buy-2.jpg"></div>
-                </td>
-                <td>TSHIRT</td>
-                <td>STANDARD</td>
-                <td>3</td>
-                <td>15</td>
-                <td>details</td>
-                <td>
-                    <a href="">Remove</a>
-                    <a href="">Save</a>
-                </td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td><p>Red printed tshirt</p></td>
-                <td><small>$150.00</small></td>
-                <td>
-                    <div class="cart-info"><img src="images/buy-3.jpg"></div>
-                </td>
-                <td>TSHIRT</td>
-                <td>STANDARD</td>
-                <td>3</td>
-                <td>15</td>
-                <td>details</td>
-                <td>
-                    <a href="">Remove</a>
-                    <a href="">Save</a>
+                    <a class="btn btnRemove"
+                            data-th-method="get"
+                            th:href="@{/admin/product/__${product.getId()}__}"
+                    >Remove</a>
+<!--                    <a class="btn btnAdd" data-th-method="post" th:href="@{/admin/product}">Save</a>-->
                 </td>
             </tr>
         </table>
+        <form class="adminInput" style = "display: none;" th:action="@{/admin/product}" method="post" id="productForm">
+            <table >
+                <tr>
+                    <td><p th:text="${productList.size()+1}"></p></td>
+                    <td><input name="name" type="text" placeholder="name"></td>
+                    <td><input name="price" type="number" placeholder="price"></td>
+                    <td><input name="img" type="text" placeholder="img url"></td>
+                    <td>
+                        <select name="type" id="type">
+                            <option value="SOCKS">SOCKS</option>
+                            <option value="PANTS">PANTS</option>
+                            <option value="SHOES">SHOES</option>
+                            <option value="ELECTRONIC">ELECTRONIC</option>
+                            <option value="TSHIRT">TSHIRT</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="tag" id="tag">
+                            <option value="NEW">NEW</option>
+                            <option value="SALE">SALE</option>
+                            <option value="EXCLUSIVE">EXCLUSIVE</option>
+                            <option value="FEATURED">FEATURED</option>
+                            <option value="STANDARD">STANDARD</option>
+                        </select>
+                    </td>
+                    <td><input name="ratio" type="number" placeholder="ratio"></td>
+                    <td><input name="available" type="text" placeholder="available?"></td>
+                    <td><input name="countAvailable" type="number" placeholder="count"></td>
+                    <td><input name="details" type="text" placeholder="details"></td>
+
+                    <td>
+                        <button type="submit" class="btn">Save</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <button id="openProductFormButton" class="btn btnAdd btnRow" type="button" onclick="openForm('productForm', 'openProductFormButton')">+</button>
     </div>
 
     <!-- users -->
     <div id="Users" class="tabcontent">
-        <table>
+        <table id="user">
             <tr>
                 <th>Id</th>
                 <th>userName</th>
@@ -101,23 +107,52 @@
                 <th>Status</th>
                 <th>Action</th>
             </tr>
-            <tr>
-                <td>1</td>
-                <td>admin</td>
-                <td>admin@mail.com</td>
-                <td>ADMIN</td>
-                <td>ACTIVE</td>
+            <tr th:each="user: ${userList}">
+                <td th:text="${user.getId()}"></td>
+                <td th:text="${user.getUserName()}"></td>
+                <td th:text="${user.getEmail()}"></td>
+                <td th:text="${user.getRole()}"></td>
+                <td th:text="${user.getStatus()}"></td>
                 <td>
-                    <a href="">Remove</a>
-                    <a href="">Save</a>
+                    <a class="btn btnRemove"
+                            data-th-method="get"
+                            th:href="@{/admin/user/__${user.getId()}__}"
+                    >Remove</a>
+<!--                    <a class="btn btnAdd" data-th-method="post" th:href="@{/admin/user}">Save</a>-->
                 </td>
             </tr>
         </table>
+        <form class="adminInput" style = "display: none;" th:action="@{/admin/user}" method="post" id="userForm">
+            <table >
+                <tr>
+                    <td><p th:text="${userList.size()+1}"></p></td>
+                    <td><input name="userName" type="text" placeholder="user name"></td>
+                    <td><input name="email" type="text" placeholder="email"></td>
+                    <td><input name="password" type="text" placeholder="password"></td>
+                    <td>
+                        <select name="role" id="role">
+                            <option value="ADMIN">ADMIN</option>
+                            <option value="USER">USER</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="status" id="status">
+                            <option value="ACTIVE">ACTIVE</option>
+                            <option value="BANNED">BANNED</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn">Save</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <button id="openUserFormButton" class="btn btnAdd btnRow" type="button" onclick="openForm('userForm', 'openUserFormButton')">+</button>
     </div>
 
     <!-- orders -->
     <div id="Orders" class="tabcontent">
-        <table>
+        <table id="order">
             <tr>
                 <th>Id</th>
                 <th>userId</th>
@@ -126,18 +161,36 @@
                 <th>productCount</th>
                 <th>Action</th>
             </tr>
-            <tr>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>XXL</td>
-                <td>3</td>
+            <tr th:each="order: ${orderList}">
+                <td th:text="${order.getId()}"></td>
+                <td th:text="${order.getUserId()}"></td>
+                <td th:text="${order.getProductId()}"></td>
+                <td th:text="${order.getProductSize()}"></td>
+                <td th:text="${order.getProductCount()}"></td>
                 <td>
-                    <a href="">Remove</a>
-                    <a href="">Save</a>
+                    <a class="btn btnRemove"
+                            data-th-method="get"
+                            th:href="@{/admin/order/__${order.getId()}__}"
+                    >Remove</a>
+<!--                    <a class="btn btnAdd" data-th-method="post" th:href="@{/admin/order}">Save</a>-->
                 </td>
             </tr>
         </table>
+        <form class="adminInput" style = "display: none;" th:action="@{/admin/order}" method="post" id="orderForm">
+            <table>
+                <tr>
+                    <td><p th:text="${orderList.size()+1}"></p></td>
+                    <td><input name="userId" type="number" placeholder="user id"></td>
+                    <td><input name="productId" type="number" placeholder="product id"></td>
+                    <td><input name="productSize" type="text" placeholder="size"></td>
+                    <td><input name="productCount" type="number" placeholder="count"></td>
+                    <td>
+                        <button type="submit" class="btn">Save</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <button id="openOrderFormButton" class="btn btnAdd btnRow" type="button" onclick="openForm('orderForm','openOrderFormButton')">+</button>
     </div>
 
 </div>
@@ -149,21 +202,10 @@
 <script th:src="@{/js/toggleScript.js}"></script>
 
 <!-- tab script -->
-<script>
-    function openTable(evt, tableName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tableName).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
-</script>
+<script th:src="@{/js/OpenTable.js}"></script>
+
+<!-- form script -->
+<script th:src="@{/js/openForm.js}"></script>
 
 </body>
 </html>
