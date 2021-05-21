@@ -23,40 +23,42 @@
     </div>
     <!-- products -->
     <div id="Products" class="tabcontent">
-        <table id="product">
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Img</th>
-                <th>Type</th>
-                <th>Tag</th>
-                <th>Ratio</th>
-                <th>Available</th>
-                <th>Details</th>
-                <th>Action</th>
-            </tr>
-            <tr th:each="product: ${productList}">
-                <td th:text="${product.getId()}"></td>
-                <td><p th:text="${product.getName()}"></p></td>
-                <td><small th:text="${product.price}"></small></td>
-                <td>
-                    <div class="cart-info"><img th:src="${product.getImg()}"></div>
-                </td>
-                <td th:text="${product.getType()}"></td>
-                <td th:text="${product.getTag()}"></td>
-                <td th:text="${product.getRatio()}"></td>
-                <td th:text="${product.getCountAvailable()}"></td>
-                <td th:text="${product.getDetails()}"></td>
-                <td>
-                    <a class="btn btnRemove"
-                            data-th-method="get"
-                            th:href="@{/admin/product/__${product.getId()}__}"
-                    >Remove</a>
-<!--                    <a class="btn btnAdd" data-th-method="post" th:href="@{/admin/product}">Save</a>-->
-                </td>
-            </tr>
-        </table>
+            <table id="product">
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Img</th>
+                    <th>Type</th>
+                    <th>Tag</th>
+                    <th>Ratio</th>
+                    <th>Available</th>
+                    <th>Count</th>
+                    <th>Details</th>
+                    <th>Action</th>
+                </tr>
+                <tr th:each="product: ${productList}">
+                    <form th:action="@{/admin/product}" method="post">
+                        <td><input name="id" type="number" th:value="${product.getId()}"></td>
+                        <td><input name="name" type="text" th:value="${product.getName()}"/></td>
+                        <td><input name="price" type="number" th:value="${product.price}"/></td>
+                        <td><input name="img" type="text" th:value="${product.getImg()}"/></td>
+                        <td><input name="type" type="text" th:value="${product.getType()}"></td>
+                        <td><input name="tag" type="text" th:value="${product.getTag()}"></td>
+                        <td><input name="ratio" type="text" th:value="${product.getRatio()}"></td>
+                        <td><input name="available" type="text" th:value="${product.isAvailable()}"></td>
+                        <td><input name="countAvailable" type="number" th:value="${product.getCountAvailable()}"></td>
+                        <td><input name="details" type="text" th:value="${product.getDetails()}"></td>
+                        <td>
+                            <a class="btn btnRemove"
+                               data-th-method="get"
+                               th:href="@{/admin/product/__${product.getId()}__}"
+                            >Remove</a>
+                            <button type="submit" class="btn btnAdd">Save</button>
+                        </td>
+                    </form>
+                </tr>
+            </table>
         <form class="adminInput" style = "display: none;" th:action="@{/admin/product}" method="post" id="productForm">
             <table >
                 <tr>
@@ -103,23 +105,28 @@
                 <th>Id</th>
                 <th>userName</th>
                 <th>Email</th>
+                <th>Password</th>
                 <th>Role</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
             <tr th:each="user: ${userList}">
-                <td th:text="${user.getId()}"></td>
-                <td th:text="${user.getUserName()}"></td>
-                <td th:text="${user.getEmail()}"></td>
-                <td th:text="${user.getRole()}"></td>
-                <td th:text="${user.getStatus()}"></td>
-                <td>
-                    <a class="btn btnRemove"
-                            data-th-method="get"
-                            th:href="@{/admin/user/__${user.getId()}__}"
-                    >Remove</a>
-<!--                    <a class="btn btnAdd" data-th-method="post" th:href="@{/admin/user}">Save</a>-->
-                </td>
+                <form th:action="@{/admin/user/update}" method="post">
+                    <td><input name="id" type="number" th:value="${user.getId()}"></td>
+                    <td><input name="userName" type="text" th:value="${user.getUserName()}"></td>
+                    <td><input name="email" type="text" th:value="${user.getEmail()}"></td>
+                    <td><input name="password" type="text" placeholder="password"></td>
+                    <td><input name="role" type="text" th:value="${user.getRole()}"></td>
+                    <td><input name="status" type="text" th:value="${user.getStatus()}"></td>
+                    <td>
+                        <a class="btn btnRemove"
+                           data-th-method="get"
+                           th:href="@{/admin/user/__${user.getId()}__}"
+                           th:if="${user.getRole().name()!='ADMIN'}"
+                        >Remove</a>
+                        <button type="submit" class="btn btnAdd">Save</button>
+                    </td>
+                </form>
             </tr>
         </table>
         <form class="adminInput" style = "display: none;" th:action="@{/admin/user}" method="post" id="userForm">
@@ -162,18 +169,20 @@
                 <th>Action</th>
             </tr>
             <tr th:each="order: ${orderList}">
-                <td th:text="${order.getId()}"></td>
-                <td th:text="${order.getUserId()}"></td>
-                <td th:text="${order.getProductId()}"></td>
-                <td th:text="${order.getProductSize()}"></td>
-                <td th:text="${order.getProductCount()}"></td>
-                <td>
-                    <a class="btn btnRemove"
-                            data-th-method="get"
-                            th:href="@{/admin/order/__${order.getId()}__}"
-                    >Remove</a>
-<!--                    <a class="btn btnAdd" data-th-method="post" th:href="@{/admin/order}">Save</a>-->
-                </td>
+                <form th:action="@{/admin/order}" method="post">
+                    <td><input name="id" type="number" th:value="${order.getId()}"></td>
+                    <td><input name="userId" type="number" th:value="${order.getUserId()}"></td>
+                    <td><input name="productId" type="number" th:value="${order.getProductId()}"></td>
+                    <td><input name="productSize" type="text" th:value="${order.getProductSize()}"></td>
+                    <td><input name="productCount" type="number" th:value="${order.getProductCount()}"></td>
+                    <td>
+                        <a class="btn btnRemove"
+                           data-th-method="get"
+                           th:href="@{/admin/order/__${order.getId()}__}"
+                        >Remove</a>
+                        <button type="submit" class="btn btnAdd">Save</button>
+                    </td>
+                </form>
             </tr>
         </table>
         <form class="adminInput" style = "display: none;" th:action="@{/admin/order}" method="post" id="orderForm">

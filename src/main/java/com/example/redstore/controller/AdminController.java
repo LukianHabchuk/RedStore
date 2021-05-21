@@ -61,4 +61,10 @@ public class AdminController {
         productService.create(product);
         return "redirect:/admin";
     }
+
+    @PostMapping("/user/update")
+    public String updateUser(User user) {
+        userService.update(user);
+        return "redirect:/admin";
+    }
 }

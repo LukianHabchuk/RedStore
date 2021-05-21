@@ -31,9 +31,16 @@ public class UserService {
     }
 
     public User create(UserDTO userDTO) {
-        userDTO.setPassword(encoder.encode(userDTO.getPassword()));
+        var user = convertUserDTO(userDTO);
+        user.setPassword(encoder.encode(userDTO.getPassword()));
         return isValid(userDTO) ?
-                repository.save(convertUserDTO(userDTO)) : null;
+                repository.save(user) : null;
+    }
+
+    public void update(User user) {
+        user.setPassword(encoder.encode(user.getPassword()));
+        repository.deleteById(user.getId());
+        repository.save(user);
     }
 
     public void remove(long id) {
