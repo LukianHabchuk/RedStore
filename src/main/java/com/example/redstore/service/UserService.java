@@ -25,13 +25,19 @@ public class UserService {
     }
 
     public User create(User user) {
+        user.setPassword(encoder.encode(user.getPassword()));
         return isValid(user) ?
                 repository.save(user) : null;
     }
 
     public User create(UserDTO userDTO) {
+        userDTO.setPassword(encoder.encode(userDTO.getPassword()));
         return isValid(userDTO) ?
                 repository.save(convertUserDTO(userDTO)) : null;
+    }
+
+    public void remove(long id) {
+        repository.deleteById(id);
     }
 
     public List<User> getAll() {

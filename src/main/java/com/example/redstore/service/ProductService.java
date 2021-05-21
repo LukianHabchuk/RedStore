@@ -27,4 +27,8 @@ public class ProductService {
     public Product getById(Long id) {
         return repository.findById(id).orElseThrow(() -> new ProductNotFoundException("product with id: " + id + " was not found"));
     }
+
+    public void remove(long id) {
+        repository.deleteById(id);
+    }
 }
