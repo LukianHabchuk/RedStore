@@ -2,6 +2,7 @@ package com.example.redstore.controller;
 
 import com.example.redstore.entity.Order;
 import com.example.redstore.entity.Product;
+import com.example.redstore.entity.sort.AlgorithmFactory;
 import com.example.redstore.enums.Tag;
 import com.example.redstore.service.OrderService;
 import com.example.redstore.service.ProductService;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -89,6 +91,19 @@ public class MainController {
         return "product";
     }
 
+    @PostMapping("/product/{page}")
+    public String getProduct(Model model, String algorithm, @PathVariable("page") int page) {
+        int productCount = productService.getAll().size();
+
+        List<Product> productList = sort(algorithm, page);
+
+        model.addAttribute("sortAlgorithm");
+        model.addAttribute("current_page", page);
+        model.addAttribute("page_count", getPageCount(productCount));
+        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productList);
+        return "product";
+    }
+
     @GetMapping("/product-details/{id}")
     public String getProductDetails(Model model, @PathVariable("id") long id) {
         var product = productService.getById(id);
@@ -98,6 +113,11 @@ public class MainController {
                 .filter(p -> p.getId()!=product.getId())
                 .limit(4).collect(Collectors.toList()));
         return "product-details";
+    }
+
+    private List<Product> sort(String algorithm, int page) {
+        List<Product> pageProducts = getPageProducts(productService.getAll().size(), page);
+        return new AlgorithmFactory(algorithm).sort(pageProducts);
     }
 
     private int getPageCount(int productCount) {
