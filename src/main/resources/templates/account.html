@@ -30,7 +30,7 @@
                         <a href="">Forgot password</a>
                     </form>
 
-                    <form th:action="@{/registration}" th:object="${userDTO}" method="post" id="RegForm">
+                    <form th:action="@{/registration}" method="post" id="RegForm">
                         <input type="text" name="username" required placeholder="Username">
                         <input type="text" name="email" required placeholder="Email">
                         <input type="password" name="password" required placeholder="Password">

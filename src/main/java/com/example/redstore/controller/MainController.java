@@ -1,7 +1,5 @@
 package com.example.redstore.controller;
 
-import com.example.redstore.dto.OrderDTO;
-import com.example.redstore.dto.UserDTO;
 import com.example.redstore.entity.Order;
 import com.example.redstore.entity.Product;
 import com.example.redstore.enums.Tag;
@@ -54,7 +52,6 @@ public class MainController {
     public String getAccount(Model model, Principal principal) {
         if (principal!=null)
             model.addAttribute("currentuser", userService.getByEmail(principal.getName()));
-        model.addAttribute("userDTO", new UserDTO());
         return "account";
     }
 
@@ -94,7 +91,6 @@ public class MainController {
     @GetMapping("/product-details/{id}")
     public String getProductDetails(Model model, @PathVariable("id") long id) {
         var product = productService.getById(id);
-        model.addAttribute("orderDTO", new OrderDTO());
         model.addAttribute("currentProduct", product);
         model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productService.getAll().stream()
                 .filter(p -> p.getType() == product.getType())

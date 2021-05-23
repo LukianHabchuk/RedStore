@@ -34,7 +34,7 @@
                     <h1 th:text="${currentProduct.getName()}"></h1>
                     <h4 th:text="${currentProduct.getPrice()}+'$'"></h4>
 
-                    <form th:action="@{/createorder}" th:object="${orderDTO}" method="post">
+                    <form th:action="@{/createorder}" method="post">
                         <input style="display: none" type="number" name="productId" th:value="${currentProduct.getId()}">
                         <div th:switch="${currentProduct.getType().toString()}">
                             <select th:case="'SHOES'" name="size">

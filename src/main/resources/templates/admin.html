@@ -23,42 +23,42 @@
     </div>
     <!-- products -->
     <div id="Products" class="tabcontent">
-            <table id="product">
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Img</th>
-                    <th>Type</th>
-                    <th>Tag</th>
-                    <th>Ratio</th>
-                    <th>Available</th>
-                    <th>Count</th>
-                    <th>Details</th>
-                    <th>Action</th>
-                </tr>
-                <tr th:each="product: ${productList}">
-                    <form th:action="@{/admin/product}" method="post">
-                        <td><input name="id" type="number" th:value="${product.getId()}"></td>
-                        <td><input name="name" type="text" th:value="${product.getName()}"/></td>
-                        <td><input name="price" type="number" th:value="${product.price}"/></td>
-                        <td><input name="img" type="text" th:value="${product.getImg()}"/></td>
-                        <td><input name="type" type="text" th:value="${product.getType()}"></td>
-                        <td><input name="tag" type="text" th:value="${product.getTag()}"></td>
-                        <td><input name="ratio" type="text" th:value="${product.getRatio()}"></td>
-                        <td><input name="available" type="text" th:value="${product.isAvailable()}"></td>
-                        <td><input name="countAvailable" type="number" th:value="${product.getCountAvailable()}"></td>
-                        <td><input name="details" type="text" th:value="${product.getDetails()}"></td>
-                        <td>
-                            <a class="btn btnRemove"
-                               data-th-method="get"
-                               th:href="@{/admin/product/__${product.getId()}__}"
-                            >Remove</a>
-                            <button type="submit" class="btn btnAdd">Save</button>
-                        </td>
-                    </form>
-                </tr>
-            </table>
+        <table id="product">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Img</th>
+                <th>Type</th>
+                <th>Tag</th>
+                <th>Ratio</th>
+                <th>Available</th>
+                <th>Count</th>
+                <th>Details</th>
+                <th>Action</th>
+            </tr>
+            <tr th:each="product: ${productList}">
+                <form th:action="@{/admin/product}" method="post">
+                    <td><input name="id" type="number" th:value="${product.getId()}"></td>
+                    <td><input name="name" type="text" th:value="${product.getName()}"/></td>
+                    <td><input name="price" type="number" th:value="${product.price}"/></td>
+                    <td><input name="img" type="text" th:value="${product.getImg()}"/></td>
+                    <td><input name="type" type="text" th:value="${product.getType()}"></td>
+                    <td><input name="tag" type="text" th:value="${product.getTag()}"></td>
+                    <td><input name="ratio" type="text" th:value="${product.getRatio()}"></td>
+                    <td><input name="available" type="text" th:value="${product.isAvailable()}"></td>
+                    <td><input name="countAvailable" type="number" th:value="${product.getCountAvailable()}"></td>
+                    <td><input name="details" type="text" th:value="${product.getDetails()}"></td>
+                    <td>
+                        <a class="btn btnRemove"
+                           data-th-method="get"
+                           th:href="@{/admin/product/__${product.getId()}__}"
+                        >Remove</a>
+                        <button type="submit" class="btn btnAdd">Save</button>
+                    </td>
+                </form>
+            </tr>
+        </table>
         <form class="adminInput" style = "display: none;" th:action="@{/admin/product}" method="post" id="productForm">
             <table >
                 <tr>
