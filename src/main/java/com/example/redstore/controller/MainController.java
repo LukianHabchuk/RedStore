@@ -57,16 +57,17 @@ public class MainController {
 
     @GetMapping("/cart")
     public String getCart(Model model, Principal principal) {
-        double subtotal;
+        double subtotal = 0;
         var userId = userService.getByEmail(principal.getName()).getId();
         List<Order> orders = orderService.getByUserId(userId);
         Map<Product, Order> productOrderMap = new HashMap<>();
 
         orders.forEach(o -> productOrderMap.put(productService.getById(o.getProductId()), o));
         //subtotal equals sum of product price multiplied in product count
-        subtotal = orders.stream().mapToDouble(o ->
-                o.getProductCount() * productOrderMap.keySet().iterator().next().getPrice()
-        ).sum();
+        subtotal += productOrderMap.keySet().stream()
+                .mapToDouble(p -> p.getPrice() * orders.stream()
+                        .filter(o -> o.getProductId() == p.getId())
+                        .findFirst().get().getProductCount()).sum();
 
         model.addAttribute("tax", 30);
         model.addAttribute("subtotal", subtotal);

@@ -39,16 +39,36 @@
             </tr>
             <tr th:each="product: ${productList}">
                 <form th:action="@{/admin/product}" method="post">
-                    <td><input name="id" type="number" th:value="${product.getId()}"></td>
-                    <td><input name="name" type="text" th:value="${product.getName()}"/></td>
-                    <td><input name="price" type="number" th:value="${product.price}"/></td>
-                    <td><input name="img" type="text" th:value="${product.getImg()}"/></td>
-                    <td><input name="type" type="text" th:value="${product.getType()}"></td>
-                    <td><input name="tag" type="text" th:value="${product.getTag()}"></td>
-                    <td><input name="ratio" type="text" th:value="${product.getRatio()}"></td>
-                    <td><input name="available" type="text" th:value="${product.isAvailable()}"></td>
-                    <td><input name="countAvailable" type="number" th:value="${product.getCountAvailable()}"></td>
-                    <td><input name="details" type="text" th:value="${product.getDetails()}"></td>
+                    <td><input style="width: 40px;" name="id" type="number" th:value="${product.getId()}"></td>
+                    <td><input style="width: 140px;" name="name" type="text" th:value="${product.getName()}"/></td>
+                    <td><input style="width: 60px;" name="price" type="number" th:value="${product.price}"/></td>
+                    <td><input style="width: 140px;" name="img" type="text" th:value="${product.getImg()}"/></td>
+                    <td>
+<!--                        <input style="width: 100px;" name="type" type="text" th:value="${product.getType()}">-->
+                        <select name="type">
+                            <option selected th:value="${product.getType()}" th:text="${product.getType()}"></option>
+                            <option th:if="${!product.getType().toString().equals('SOCKS')}" value="SOCKS">SOCKS</option>
+                            <option th:if="${!product.getType().toString().equals('PANTS')}" value="PANTS">PANTS</option>
+                            <option th:if="${!product.getType().toString().equals('SHOES')}" value="SHOES">SHOES</option>
+                            <option th:if="${!product.getType().toString().equals('ELECTRONIC')}" value="ELECTRONIC">ELECTRONIC</option>
+                            <option th:if="${!product.getType().toString().equals('TSHIRT')}" value="TSHIRT">TSHIRT</option>
+                        </select>
+                    </td>
+                    <td>
+<!--                        <input style="width: 90px;" name="tag" type="text" th:value="${product.getTag()}">-->
+                        <select name="tag">
+                            <option selected th:value="${product.getTag()}" th:text="${product.getTag()}"></option>
+                            <option th:if="${!product.getTag().toString().equals('NEW')}" value="NEW">NEW</option>
+                            <option th:if="${!product.getTag().toString().equals('SALE')}" value="SALE">SALE</option>
+                            <option th:if="${!product.getTag().toString().equals('EXCLUSIVE')}" value="EXCLUSIVE">EXCLUSIVE</option>
+                            <option th:if="${!product.getTag().toString().equals('FEATURED')}" value="FEATURED">FEATURED</option>
+                            <option th:if="${!product.getTag().toString().equals('STANDARD')}" value="STANDARD">STANDARD</option>
+                        </select>
+                    </td>
+                    <td><input style="width: 40px;" name="ratio" type="text" th:value="${product.getRatio()}"></td>
+                    <td><input style="width: 40px;" name="available" type="text" th:value="${product.isAvailable()}"></td>
+                    <td><input style="width: 40px;" name="countAvailable" type="number" th:value="${product.getCountAvailable()}"></td>
+                    <td><textarea name="details" cols="30" rows="3" th:text="${product.getDetails()}"></textarea></td>
                     <td>
                         <a class="btn btnRemove"
                            data-th-method="get"
@@ -87,8 +107,7 @@
                     <td><input name="ratio" type="number" placeholder="ratio"></td>
                     <td><input name="available" type="text" placeholder="available?"></td>
                     <td><input name="countAvailable" type="number" placeholder="count"></td>
-                    <td><input name="details" type="text" placeholder="details"></td>
-
+                    <td><textarea name="details" placeholder="details" cols="30" rows="5"></textarea></td>
                     <td>
                         <button type="submit" class="btn">Save</button>
                     </td>
@@ -113,18 +132,32 @@
             <tr th:each="user: ${userList}">
                 <form th:action="@{/admin/user/update}" method="post">
                     <td><input name="id" type="number" th:value="${user.getId()}"></td>
-                    <td><input name="userName" type="text" th:value="${user.getUserName()}"></td>
-                    <td><input name="email" type="text" th:value="${user.getEmail()}"></td>
-                    <td><input name="password" type="text" placeholder="password"></td>
-                    <td><input name="role" type="text" th:value="${user.getRole()}"></td>
-                    <td><input name="status" type="text" th:value="${user.getStatus()}"></td>
+                    <td><input style="width: 150px;" name="userName" type="text" th:value="${user.getUserName()}"></td>
+                    <td><input style="width: 150px;" name="email" type="text" th:value="${user.getEmail()}"></td>
+                    <td><input style="width: 100px;" name="password" type="text" placeholder="password"></td>
+                    <td>
+                        <select name="role">
+                            <option selected th:value="${user.getRole()}" th:text="${user.getRole()}"></option>
+                            <option th:if="${!user.getRole().toString().equals('ADMIN')}" value="ADMIN">ADMIN</option>
+                            <option th:if="${!user.getRole().toString().equals('USER')}" value="USER">USER</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="status">
+                            <option selected th:value="${user.getStatus()}" th:text="${user.getStatus()}"></option>
+                            <option th:if="${!user.getStatus().toString().equals('ACTIVE')}" value="ACTIVE">ACTIVE</option>
+                            <option th:if="${!user.getStatus().toString().equals('BANNED')}" value="BANNED">BANNED</option>
+                        </select>
+                    </td>
                     <td>
                         <a class="btn btnRemove"
                            data-th-method="get"
                            th:href="@{/admin/user/__${user.getId()}__}"
                            th:if="${user.getRole().name()!='ADMIN'}"
                         >Remove</a>
-                        <button type="submit" class="btn btnAdd">Save</button>
+                        <button th:if="${user.getRole().name()!='ADMIN'}"
+                                type="submit" class="btn btnAdd">Save</button>
+                        <p th:if="${user.getRole().name()=='ADMIN'}">Admin is unchangeable</p>
                     </td>
                 </form>
             </tr>
@@ -154,7 +187,8 @@
                 </tr>
             </table>
         </form>
-        <button id="openUserFormButton" class="btn btnAdd btnRow" type="button" onclick="openForm('userForm', 'openUserFormButton')">+</button>
+        <button id="openUserFormButton" class="btn btnAdd btnRow" type="button"
+                onclick="openForm('userForm', 'openUserFormButton')">+</button>
     </div>
 
     <!-- orders -->
