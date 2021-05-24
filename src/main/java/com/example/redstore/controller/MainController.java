@@ -2,7 +2,6 @@ package com.example.redstore.controller;
 
 import com.example.redstore.entity.Order;
 import com.example.redstore.entity.Product;
-import com.example.redstore.entity.sort.AlgorithmFactory;
 import com.example.redstore.enums.Tag;
 import com.example.redstore.service.OrderService;
 import com.example.redstore.service.ProductService;
@@ -14,13 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.example.redstore.constants.Constants.PRODUCT_COUNT_PER_PAGE;
-import static com.example.redstore.constants.Constants.PRODUCT_LIST_ATTRIBUTE;
+import static com.example.redstore.constants.Constants.*;
 
 @Controller
 public class MainController {
@@ -37,8 +36,9 @@ public class MainController {
 
     @GetMapping("/index")
     public String getIndex(Model model) {
-        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productService.getAll()
-                .stream().filter(p -> p.getTag() == Tag.FEATURED).collect(Collectors.toList()));
+        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productService.getAll().stream()
+                .filter(p -> p.getTag() == Tag.FEATURED)
+                .collect(Collectors.toList()));
         return "index";
     }
 
@@ -52,84 +52,70 @@ public class MainController {
 
     @GetMapping("/account")
     public String getAccount(Model model, Principal principal) {
-        if (principal!=null)
+        if (principal != null)
             model.addAttribute("currentuser", userService.getByEmail(principal.getName()));
         return "account";
     }
 
     @GetMapping("/cart")
     public String getCart(Model model, Principal principal) {
-        double subtotal = 0;
-        var userId = userService.getByEmail(principal.getName()).getId();
-        List<Order> orders = orderService.getByUserId(userId);
-        Map<Product, Order> productOrderMap = new HashMap<>();
-
-        orders.forEach(o -> productOrderMap.put(productService.getById(o.getProductId()), o));
-        //subtotal equals sum of product price multiplied in product count
-        subtotal += productOrderMap.keySet().stream()
-                .mapToDouble(p -> p.getPrice() * orders.stream()
-                        .filter(o -> o.getProductId() == p.getId())
-                        .findFirst().get().getProductCount()).sum();
-
-        model.addAttribute("tax", 30);
-        model.addAttribute("subtotal", subtotal);
-        model.addAttribute("products", productOrderMap.keySet());
-        model.addAttribute("orders", productOrderMap);
+        long userId = userService.getByEmail(principal.getName()).getId();
+        Map<Product, Order> cartInfo = getCartInfo(userId);
+        model.addAttribute("tax", TAX_AMOUNT);
+        model.addAttribute("subtotal", getSubtotal(cartInfo));
+        model.addAttribute("products", cartInfo.keySet());
+        model.addAttribute("orders", cartInfo);
         return "cart";
     }
 
     @GetMapping("/product/{page}")
     public String getProduct(Model model, @PathVariable("page") int page) {
-        int productCount = productService.getAll().size();
-
-        List<Product> productList = getPageProducts(productCount, page);
-
-        model.addAttribute("sortAlgorithm");
         model.addAttribute("current_page", page);
-        model.addAttribute("page_count", getPageCount(productCount));
-        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productList);
+        model.addAttribute("page_count", getPageCount());
+        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productService.getPageProducts(page));
         return "product";
     }
 
     @PostMapping("/product/{page}")
     public String getProduct(Model model, String algorithm, @PathVariable("page") int page) {
-        int productCount = productService.getAll().size();
-
-        List<Product> productList = sort(algorithm, page);
-
-        model.addAttribute("sortAlgorithm");
         model.addAttribute("current_page", page);
-        model.addAttribute("page_count", getPageCount(productCount));
-        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productList);
+        model.addAttribute("page_count", getPageCount());
+        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productService.sort(algorithm));
         return "product";
     }
 
     @GetMapping("/product-details/{id}")
     public String getProductDetails(Model model, @PathVariable("id") long id) {
-        var product = productService.getById(id);
-        model.addAttribute("currentProduct", product);
-        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productService.getAll().stream()
-                .filter(p -> p.getType() == product.getType())
-                .filter(p -> p.getId()!=product.getId())
-                .limit(4).collect(Collectors.toList()));
+        model.addAttribute("currentProduct", productService.getById(id));
+        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productService.getSimilarProducts(id));
         return "product-details";
     }
 
-    private List<Product> sort(String algorithm, int page) {
-        List<Product> pageProducts = getPageProducts(productService.getAll().size(), page);
-        return new AlgorithmFactory(algorithm).sort(pageProducts);
+    private Map<Product, Order> getCartInfo(long userId) {
+        List<Order> orders = orderService.getByUserId(userId);
+        Map<Product, Order> productOrderMap = new HashMap<>();
+        orders.forEach(o -> productOrderMap.put(productService.getById(o.getProductId()), o));
+        return productOrderMap;
     }
 
-    private int getPageCount(int productCount) {
+    private double getSubtotal(Map<Product, Order> productOrderMap) {
+        List<Order> orders = new ArrayList<>(productOrderMap.values());
+        //subtotal equals sum of product price multiplied in product count
+        return productOrderMap.keySet().stream()
+                .mapToDouble(p -> p.getPrice() * orders.stream()
+                        .filter(o -> o.getProductId() == p.getId())
+                        .findFirst().get().getProductCount()).sum();
+    }
+
+    /** if there are enough products to completely cover the countable number of pages:
+     * @return = number of fully covered pages
+        if the last page does not occupy all the space:
+                number of fully covered pages + 1
+     */
+    private int getPageCount() {
+        int productCount = productService.getAll().size();
         return productCount % PRODUCT_COUNT_PER_PAGE == 0
                 ? productCount / PRODUCT_COUNT_PER_PAGE
                 : productCount / PRODUCT_COUNT_PER_PAGE + 1;
-    }
-
-    //determines how many products will be on each page
-    private List<Product> getPageProducts(int productCount, int page) {
-        return productCount >= PRODUCT_COUNT_PER_PAGE * page
-                ? productService.getAll().subList((page - 1) * PRODUCT_COUNT_PER_PAGE, page * PRODUCT_COUNT_PER_PAGE)
-                : productService.getAll().subList((page - 1) * PRODUCT_COUNT_PER_PAGE, productCount);
     }
 }

@@ -54,19 +54,19 @@ public class UserService {
     public User getById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() ->
-                        new UserNotFoundException(String.format(WITH_ID_WAS_NOT_FOUND, USER_ATTRIBUTE, id)));
+                        new UserNotFoundException(String.format(WITH_WAS_NOT_FOUND, USER_ATTRIBUTE, "id", id)));
     }
 
     public User getByUserName(String userName) {
         return repository.findByUserName(userName)
                 .orElseThrow(() ->
-                        new UserNotFoundException(String.format(WITH_USERNAME_WAS_NOT_FOUND, USER_ATTRIBUTE, userName)));
+                        new UserNotFoundException(String.format(WITH_S_WAS_NOT_FOUND, USER_ATTRIBUTE, "username", userName)));
     }
 
     public User getByEmail(String email) {
         return repository.findByEmail(email)
                 .orElseThrow(() ->
-                        new UserNotFoundException(String.format(WITH_EMAIL_WAS_NOT_FOUND, USER_ATTRIBUTE, email)));
+                        new UserNotFoundException(String.format(WITH_S_WAS_NOT_FOUND, USER_ATTRIBUTE, "email", email)));
     }
 
     public boolean isValid(UserDTO userDTO) {

@@ -39,16 +39,16 @@ public class OrderService {
 
     public Order getById(Long id) {
         return repository.findById(id).orElseThrow(() ->
-                new OrderNotFoundException(String.format(WITH_ID_WAS_NOT_FOUND, ORDER_ATTRIBUTE, id)));
+                new OrderNotFoundException(String.format(WITH_WAS_NOT_FOUND, ORDER_ATTRIBUTE, "id", id)));
     }
 
     public List<Order> getByUserId(Long id) {
         return repository.findAllByUserId(id).orElseThrow(() ->
-                new OrderNotFoundException(String.format(WITH_USER_ID_WAS_NOT_FOUND, ORDER_ATTRIBUTE, id)));
+                new OrderNotFoundException(String.format(WITH_WAS_NOT_FOUND, ORDER_ATTRIBUTE, "user id", id)));
     }
 
     public List<Order> getByProductId(Long id) {
         return repository.findAllByProductId(id).orElseThrow(() ->
-                new OrderNotFoundException(String.format(WITH_PRODUCT_ID_WAS_NOT_FOUND, ORDER_ATTRIBUTE, id)));
+                new OrderNotFoundException(String.format(WITH_WAS_NOT_FOUND, ORDER_ATTRIBUTE, "product id", id)));
     }
 }
