@@ -6,11 +6,10 @@ import com.example.redstore.enums.Tag;
 import com.example.redstore.service.OrderService;
 import com.example.redstore.service.ProductService;
 import com.example.redstore.service.UserService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -69,18 +68,15 @@ public class MainController {
     }
 
     @GetMapping("/product/{page}")
-    public String getProduct(Model model, @PathVariable("page") int page) {
-        model.addAttribute("current_page", page);
-        model.addAttribute("page_count", getPageCount());
-        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productService.getPageProducts(page));
-        return "product";
-    }
-
-    @PostMapping("/product/{page}")
-    public String getProduct(Model model, String algorithm, @PathVariable("page") int page) {
-        model.addAttribute("current_page", page);
-        model.addAttribute("page_count", getPageCount());
-        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productService.sort(algorithm));
+    public String getProduct(Model model, @RequestParam("algorithm") String algorithm, @PathVariable("page") int page) {
+        Page<Product> productPage = productService.getPaginated(page, algorithm);
+        if (algorithm != null)
+            model.addAttribute("algorithm", algorithm);
+        else
+            model.addAttribute("algorithm", "");
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageTotal", productPage.getTotalPages());
+        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productPage.getContent());
         return "product";
     }
 
@@ -105,17 +101,5 @@ public class MainController {
                 .mapToDouble(p -> p.getPrice() * orders.stream()
                         .filter(o -> o.getProductId() == p.getId())
                         .findFirst().get().getProductCount()).sum();
-    }
-
-    /** if there are enough products to completely cover the countable number of pages:
-     * @return = number of fully covered pages
-        if the last page does not occupy all the space:
-                number of fully covered pages + 1
-     */
-    private int getPageCount() {
-        int productCount = productService.getAll().size();
-        return productCount % PRODUCT_COUNT_PER_PAGE == 0
-                ? productCount / PRODUCT_COUNT_PER_PAGE
-                : productCount / PRODUCT_COUNT_PER_PAGE + 1;
     }
 }

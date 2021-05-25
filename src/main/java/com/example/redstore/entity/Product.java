@@ -12,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "product")
-public class Product implements Comparable<Product>{
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -27,9 +27,4 @@ public class Product implements Comparable<Product>{
     private boolean available;
     private int countAvailable;
     private String details;
-
-    @Override
-    public int compareTo(Product o) {
-        return Double.compare(this.price, o.getPrice());
-    }
 }

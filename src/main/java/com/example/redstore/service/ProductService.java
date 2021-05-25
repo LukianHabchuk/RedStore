@@ -1,9 +1,13 @@
 package com.example.redstore.service;
 
 import com.example.redstore.entity.Product;
-import com.example.redstore.entity.sort.AlgorithmFactory;
+import com.example.redstore.enums.SortAlgorithmName;
 import com.example.redstore.exception.ProductNotFoundException;
 import com.example.redstore.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,15 +49,25 @@ public class ProductService {
                 .limit(4).collect(Collectors.toList());
     }
 
-    public List<Product> sort(String algorithm) {
-        return new AlgorithmFactory(algorithm).sort(getAll());
+    public Page<Product> getPaginated(int page, String algorithm) {
+        var sort = sort(algorithm);
+        if (sort != null) {
+            Pageable pageable = PageRequest.of(page-1, PRODUCT_COUNT_PER_PAGE, sort);
+            return this.repository.findAll(pageable);
+        }
+        Pageable pageable = PageRequest.of(page-1, PRODUCT_COUNT_PER_PAGE);
+        return this.repository.findAll(pageable);
     }
 
-    //determines how many products will be on each page
-    public List<Product> getPageProducts(int page) {
-        var productCount = getAll().size();
-        return productCount >= PRODUCT_COUNT_PER_PAGE * page
-                ? getAll().subList((page - 1) * PRODUCT_COUNT_PER_PAGE, page * PRODUCT_COUNT_PER_PAGE)
-                : getAll().subList((page - 1) * PRODUCT_COUNT_PER_PAGE, productCount);
+    public Sort sort(String algorithmName) {
+        if (algorithmName.equals(SortAlgorithmName.PRICE_LOW.getName()))
+            return Sort.by("price").ascending();
+        if (algorithmName.equals(SortAlgorithmName.PRICE_HIGH.getName()))
+            return Sort.by("price").descending();
+        if (algorithmName.equals(SortAlgorithmName.RATING.getName()))
+            return Sort.by("ratio").descending();
+        if (algorithmName.equals(SortAlgorithmName.NAME.getName()))
+            return Sort.by("name").ascending();
+        return null;
     }
 }
