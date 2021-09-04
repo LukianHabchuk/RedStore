@@ -9,22 +9,33 @@
 
         <div class="row row-2">
             <h2>All products</h2>
-            <form method="post">
+            <form method="get">
                 <select onchange="this.form.submit()" name="algorithm" id="algorithm">
                     <option value="">Default sorting</option>
-                    <option value="PRICE_LOW">Price low to high</option>
-                    <option value="PRICE_HIGH">Price high to low</option>
-                    <option value="RATING">Sort by rating</option>
-                    <option value="NAME">Sort by name</option>
+                    <option selected th:if="${!algorithm.isEmpty()}" th:text="${algorithm}" th:value="${algorithm}"></option>
+                    <option th:if="${!algorithm.equals('PRICE_LOW')}" value="PRICE_LOW">Price low to high</option>
+                    <option th:if="${!algorithm.equals('PRICE_HIGH')}" value="PRICE_HIGH">Price high to low</option>
+                    <option th:if="${!algorithm.equals('RATING')}" value="RATING">Sort by rating</option>
+                    <option th:if="${!algorithm.equals('NAME')}" value="NAME">Sort by name</option>
                 </select>
             </form>
         </div>
 
         <div th:include="constructor::products"></div>
 
-        <div class="page-btn">
-            <a th:each="i : ${#numbers.sequence( 1, page_count)}" th:href="@{/product/__${i}__}"><span th:text="${ i }"></span></a>
-            <a th:if="${current_page < page_count}" th:href="@{/product/__${current_page+1}__}"><span>&#8594;</span></a>
+        <div class="page-btn" th:if="${pageTotal > 1}">
+            <span th:each="i: ${#numbers.sequence(1, pageTotal)}">
+                <a th:if="${currentPage != i}" th:href="@{'/product/' + ${i} + '?algorithm=' + ${algorithm}}" th:text="${i}"></a>
+                <span class="insideSpan" th:unless="${currentPage != i}" th:text="${i}"></span>
+            </span>
+            <span>
+                <a th:if="${currentPage < pageTotal}" th:href="@{'/product/'+${currentPage+1} + '?algorithm=' + ${algorithm}}">Next</a>
+                <span class="insideSpan" th:unless="${currentPage < pageTotal}">Next</span>
+            </span>
+            <span>
+                <a th:if="${currentPage < pageTotal}" th:href="@{'/product/'+${pageTotal} + '?algorithm=' + ${algorithm}}">Last</a>
+                <span class="insideSpan" th:unless="${currentPage < pageTotal}">Last</span>
+            </span>
         </div>
     </div>
 

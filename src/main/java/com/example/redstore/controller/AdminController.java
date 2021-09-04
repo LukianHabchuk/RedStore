@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminController {
 
+    private static final String REDIRECT_PATH = "redirect:/admin";
+
     private final OrderService orderService;
     private final UserService userService;
     private final ProductService productService;
@@ -29,42 +31,42 @@ public class AdminController {
     @GetMapping("/order/{id}")
     public String removeOrder(@PathVariable("id") long id) {
         orderService.remove(id);
-        return "redirect:/admin";
+        return REDIRECT_PATH;
     }
 
     @GetMapping("/user/{id}")
     public String removeUser(@PathVariable("id") long id) {
         userService.remove(id);
-        return "redirect:/admin";
+        return REDIRECT_PATH;
     }
 
     @GetMapping("/product/{id}")
     public String removeProduct(@PathVariable("id") long id) {
         productService.remove(id);
-        return "redirect:/admin";
+        return REDIRECT_PATH;
     }
 
     @PostMapping("/order")
     public String saveOrder(Order order) {
         orderService.create(order);
-        return "redirect:/admin";
+        return REDIRECT_PATH;
     }
 
     @PostMapping("/user")
     public String saveUser(User user) {
         userService.create(user);
-        return "redirect:/admin";
+        return REDIRECT_PATH;
     }
 
     @PostMapping("/product")
     public String saveProduct(Product product) {
         productService.create(product);
-        return "redirect:/admin";
+        return REDIRECT_PATH;
     }
 
     @PostMapping("/user/update")
     public String updateUser(User user) {
         userService.update(user);
-        return "redirect:/admin";
+        return REDIRECT_PATH;
     }
 }

@@ -26,15 +26,13 @@ public class UserService {
 
     public User create(User user) {
         user.setPassword(encoder.encode(user.getPassword()));
-        return isValid(user) ?
-                repository.save(user) : null;
+        return repository.save(user);
     }
 
     public User create(UserDTO userDTO) {
         var user = convertUserDTO(userDTO);
         user.setPassword(encoder.encode(userDTO.getPassword()));
-        return isValid(userDTO) ?
-                repository.save(user) : null;
+        return repository.save(user);
     }
 
     public void update(User user) {
@@ -51,38 +49,14 @@ public class UserService {
         return repository.findAll();
     }
 
-    public User getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() ->
-                        new UserNotFoundException(String.format(WITH_WAS_NOT_FOUND, USER_ATTRIBUTE, "id", id)));
-    }
-
-    public User getByUserName(String userName) {
-        return repository.findByUserName(userName)
-                .orElseThrow(() ->
-                        new UserNotFoundException(String.format(WITH_S_WAS_NOT_FOUND, USER_ATTRIBUTE, "username", userName)));
-    }
-
     public User getByEmail(String email) {
         return repository.findByEmail(email)
                 .orElseThrow(() ->
                         new UserNotFoundException(String.format(WITH_S_WAS_NOT_FOUND, USER_ATTRIBUTE, "email", email)));
     }
 
-    public boolean isValid(UserDTO userDTO) {
-        return !isExists(userDTO.getUsername(), userDTO.getEmail()) && isPasswordValid(userDTO.getPassword());
-    }
-
-    public boolean isValid(User user) {
-        return !isExists(user.getUserName(), user.getEmail()) && isPasswordValid(user.getPassword());
-    }
-
-    private boolean isExists(String username, String email) {
+    public boolean isExists(String username, String email) {
         return repository.findByUserName(username).isPresent() || repository.findByEmail(email).isPresent();
-    }
-
-    private boolean isPasswordValid(String password) {
-        return password.length()>=8;
     }
 
     private User convertUserDTO(UserDTO userDTO) {
