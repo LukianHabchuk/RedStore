@@ -3,11 +3,10 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:th="http://www.thymeleaf.org">
-    <head th:include="constructor::head"></head>
-    <body>
+<head th:include="constructor::head"></head>
+<body>
 
-    <div th:include="constructor::navbar"></div>
-
+<div th:include="constructor::navbar"></div>
 
 <!-- ACCOUNT PAGE -->
 <div sec:authorize="isAnonymous()" class="account-page">
@@ -23,9 +22,12 @@
                         <span onclick="register()">Register</span>
                         <hr id="Indicator">
                     </div>
+                    <div id="snackbar" th:if="${message!=null}">
+                        <small style="color: red" th:text="${message}"></small>
+                    </div>
                     <form th:action="@{/login}" method="post" id="LoginForm">
                         <input type="text" name="username" required placeholder="Username">
-                        <input type="password" name="password" required placeholder="Password">
+                        <input type="password" name="password" required minlength="8" placeholder="Password">
                         <button type="submit" class="btn">Login</button>
                         <a href="">Forgot password</a>
                     </form>
@@ -33,7 +35,7 @@
                     <form th:action="@{/registration}" method="post" id="RegForm">
                         <input type="text" name="username" required placeholder="Username">
                         <input type="text" name="email" required placeholder="Email">
-                        <input type="password" name="password" required placeholder="Password">
+                        <input type="password" name="password" required minlength="8" placeholder="Password">
                         <button type="submit" class="btn">Register</button>
                     </form>
 
@@ -43,27 +45,27 @@
     </div>
 </div>
 
-    <!-- account details -->
-    <div sec:authorize="isAuthenticated()" class="account-page">
-        <div class="container">
-            <div class="row">
-                <div class="col-2">
-                    <div class="form-container">
-                        <div class="form-btn">
-                            <h2>Account menu</h2>
-                        </div>
-                        <form id="account">
-                            <input type="text" name="username" th:placeholder="${currentuser.getUserName()}">
-                            <input type="email" name="email" th:placeholder="${currentuser.getEmail()}">
-                            <p>I can't show your password, but you may know it...</p>
-                            <input type="password" name="password" placeholder="Password">
-                            <button type="submit" class="btn">Save</button>
-                        </form>
+<!-- account details -->
+<div sec:authorize="isAuthenticated()" class="account-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
+                <div class="form-container">
+                    <div class="form-btn">
+                        <h2>Account menu</h2>
                     </div>
+                    <form id="account">
+                        <input type="text" name="username" th:placeholder="${currentuser.getUserName()}">
+                        <input type="email" name="email" th:placeholder="${currentuser.getEmail()}">
+                        <p>I can't show your password, but you may know it...</p>
+                        <input type="password" name="password" placeholder="Password">
+                        <button type="submit" class="btn">Save</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 <!-- footer -->
 <div th:include="constructor::footer"></div>
@@ -71,8 +73,8 @@
 <!-- js for toggle -->
 <script th:src="@{/js/toggleScript.js}"></script>
 
-    <!-- js for toggle form -->
-    <script th:src="@{/js/toggleFormScript.js}"></script>
+<!-- js for toggle form -->
+<script th:src="@{/js/toggleFormScript.js}"></script>
 
-    </body>
+</body>
 </html>
