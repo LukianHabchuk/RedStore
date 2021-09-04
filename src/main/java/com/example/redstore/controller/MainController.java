@@ -12,11 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static com.example.redstore.constants.Constants.*;
 
@@ -35,9 +31,7 @@ public class MainController {
 
     @GetMapping("/index")
     public String getIndex(Model model) {
-        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productService.getAll().stream()
-                .filter(p -> p.getTag() == Tag.FEATURED)
-                .collect(Collectors.toList()));
+        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productService.getByTag(Tag.FEATURED));
         return "index";
     }
 
@@ -70,10 +64,7 @@ public class MainController {
     @GetMapping("/product/{page}")
     public String getProduct(Model model, @RequestParam("algorithm") String algorithm, @PathVariable("page") int page) {
         Page<Product> productPage = productService.getPaginated(page, algorithm);
-        if (algorithm != null)
-            model.addAttribute("algorithm", algorithm);
-        else
-            model.addAttribute("algorithm", "");
+        model.addAttribute("algorithm", "");
         model.addAttribute("currentPage", page);
         model.addAttribute("pageTotal", productPage.getTotalPages());
         model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productPage.getContent());
@@ -98,8 +89,13 @@ public class MainController {
         List<Order> orders = new ArrayList<>(productOrderMap.values());
         //subtotal equals sum of product price multiplied in product count
         return productOrderMap.keySet().stream()
-                .mapToDouble(p -> p.getPrice() * orders.stream()
-                        .filter(o -> o.getProductId() == p.getId())
-                        .findFirst().get().getProductCount()).sum();
+                .mapToDouble(p -> p.getPrice() * getProductCount(orders, p.getId())).sum();
+    }
+
+    private int getProductCount(List<Order> orders, long productId) {
+        Optional<Order> orderOptional = orders.stream()
+                .filter(o -> o.getProductId() == productId)
+                .findFirst();
+        return orderOptional.map(Order::getProductCount).orElse(0);
     }
 }
